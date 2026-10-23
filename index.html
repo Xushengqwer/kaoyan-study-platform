@@ -311,19 +311,25 @@
         <div v-if="englishTab === 'vocab'" class="space-y-6 max-w-3xl mx-auto">
           
           <!-- 筛选与进度 -->
-          <div class="flex items-center justify-between text-xs text-slate-500 bg-white p-3 rounded-xl border border-slate-200">
-            <div class="flex items-center space-x-2">
-              <span class="font-semibold text-slate-700">词汇范围：</span>
+          <div class="flex items-center justify-between text-xs text-slate-500 bg-white p-3 rounded-xl border border-slate-200 gap-2">
+            <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
+              <span class="font-semibold text-slate-700 whitespace-nowrap">分类：</span>
               <button 
                 @click="vocabFilter = 'all'; vocabIndex = 0"
-                :class="vocabFilter === 'all' ? 'bg-blue-600 text-white font-bold' : 'bg-slate-100 text-slate-700'"
-                class="px-2.5 py-1 rounded-md transition">全部高频词 ({{ vocabList.length }})</button>
+                :class="vocabFilter === 'all' ? 'bg-blue-600 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                class="px-2.5 py-1 rounded-md whitespace-nowrap transition">全部 ({{ vocabList.length }})</button>
+              <button 
+                v-for="cat in ['高频动词', '高频名词', '高频形容词', '写作亮点词', '熟词僻义']"
+                :key="cat"
+                @click="vocabFilter = cat; vocabIndex = 0"
+                :class="vocabFilter === cat ? 'bg-blue-600 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
+                class="px-2.5 py-1 rounded-md whitespace-nowrap transition">{{ cat }}</button>
               <button 
                 @click="vocabFilter = 'saved'; vocabIndex = 0"
-                :class="vocabFilter === 'saved' ? 'bg-blue-600 text-white font-bold' : 'bg-slate-100 text-slate-700'"
-                class="px-2.5 py-1 rounded-md transition">生词本 ({{ userData.savedVocabIds.length }})</button>
+                :class="vocabFilter === 'saved' ? 'bg-amber-600 text-white font-bold' : 'bg-amber-50 text-amber-800 border border-amber-200'"
+                class="px-2.5 py-1 rounded-md whitespace-nowrap transition">⭐ 生词本 ({{ userData.savedVocabIds.length }})</button>
             </div>
-            <span>第 {{ vocabIndex + 1 }} / {{ filteredVocabList.length }} 词</span>
+            <span class="whitespace-nowrap font-mono text-slate-600 font-medium">第 {{ vocabIndex + 1 }} / {{ filteredVocabList.length }} 词</span>
           </div>
 
           <!-- 词汇卡片 -->

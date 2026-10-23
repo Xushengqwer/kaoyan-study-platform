@@ -94,11 +94,14 @@ createApp({
     // 1. 词汇背诵
     const vocabIndex = ref(0);
     const showVocabMeaning = ref(false);
-    const vocabFilter = ref('all'); // 'all' | 'saved'
+    const vocabFilter = ref('all'); // 'all' | 'saved' | '高频动词' | '高频名词' | '高频形容词' | '写作亮点词'
 
     const filteredVocabList = computed(() => {
       if (vocabFilter.value === 'saved') {
         return vocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+      }
+      if (vocabFilter.value !== 'all') {
+        return vocabList.value.filter(v => v.category === vocabFilter.value);
       }
       return vocabList.value;
     });

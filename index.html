@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>研途宝 · 考研英语 & 政治双核备战学习平台</title>
+  <title>研途宝 · 考研英语 & 政治全景备战学习平台</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Vue 3 CDN -->
@@ -54,9 +54,9 @@
           <div>
             <div class="flex items-center space-x-2">
               <span class="text-lg font-black tracking-tight bg-gradient-to-r from-slate-900 via-brand-800 to-slate-900 bg-clip-text text-transparent">研途宝</span>
-              <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-semibold">双核备战版</span>
+              <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-semibold">全量真题版</span>
             </div>
-            <p class="text-xs text-slate-500 font-medium">考研英语 · 考研政治 智能化学习平台</p>
+            <p class="text-xs text-slate-500 font-medium">考研英语 5530 词库 · 阅读全文 · 政治全科题库</p>
           </div>
         </div>
 
@@ -75,7 +75,7 @@
             :class="currentTab === 'english' ? 'bg-white text-blue-700 font-bold shadow-sm' : 'text-slate-600 hover:text-slate-900'"
             class="px-4 py-1.5 rounded-lg text-sm transition-all flex items-center space-x-1.5">
             <span>🇬🇧</span>
-            <span>考研英语</span>
+            <span>考研英语 (5530词+阅读)</span>
           </button>
 
           <button 
@@ -83,7 +83,7 @@
             :class="currentTab === 'politics' ? 'bg-white text-rose-700 font-bold shadow-sm' : 'text-slate-600 hover:text-slate-900'"
             class="px-4 py-1.5 rounded-lg text-sm transition-all flex items-center space-x-1.5">
             <span>🇨🇳</span>
-            <span>考研政治</span>
+            <span>考研政治 (全科题库+考点)</span>
           </button>
 
           <button 
@@ -113,11 +113,11 @@
 
       </div>
 
-      <!-- 移动端底部横滑导航 -->
+      <!-- 移动端横滑导航 -->
       <div class="md:hidden flex border-t border-slate-200 overflow-x-auto px-2 py-1.5 space-x-2 bg-slate-50 text-xs">
         <button @click="currentTab = 'dashboard'" :class="currentTab === 'dashboard' ? 'text-brand-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">仪表盘</button>
-        <button @click="currentTab = 'english'" :class="currentTab === 'english' ? 'text-blue-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">考研英语</button>
-        <button @click="currentTab = 'politics'" :class="currentTab === 'politics' ? 'text-rose-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">考研政治</button>
+        <button @click="currentTab = 'english'" :class="currentTab === 'english' ? 'text-blue-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">考研英语 (5530词)</button>
+        <button @click="currentTab = 'politics'" :class="currentTab === 'politics' ? 'text-rose-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">考研政治 (全科)</button>
         <button @click="currentTab = 'notebook'" :class="currentTab === 'notebook' ? 'text-amber-700 font-bold' : 'text-slate-600'" class="px-3 py-1 whitespace-nowrap">错题与生词</button>
       </div>
     </header>
@@ -129,18 +129,18 @@
       <div v-if="currentTab === 'dashboard'" class="space-y-6">
         
         <!-- 核心 Banner 与倒计时动员令 -->
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-900 via-slate-900 to-brand-900 text-white p-6 sm:p-8 shadow-xl">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-blue-950 text-white p-6 sm:p-8 shadow-xl">
           <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="space-y-2 max-w-2xl">
               <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-xs font-semibold backdrop-blur-md">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>2026/2027 考研冲刺提分周期</span>
+                <span>考研大纲 5,530 全量词库 + 历年真题精读已就绪</span>
               </div>
               <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
-                咬定青山不放松 · 研途定能圆梦
+                全面扩容升级 · 真实真题题库与海量词汇
               </h1>
               <p class="text-sm text-slate-300 leading-relaxed">
-                英语重在词汇沉淀与长难句底层逻辑，政治胜在多选题陷阱排查与答题原理提炼。双核驱动，全面突破公共课瓶颈！
+                英语全面引入大纲 5,530 完整词库（带真题词频统计与单元刷词）、历年真题阅读全文双语精读；政治全面涵盖四大科目客观题库与知识点全书！
               </p>
             </div>
 
@@ -157,18 +157,18 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition-shadow">
             <div class="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
-              <span>英语核心词牢记</span>
-              <span class="text-blue-600 font-bold">{{ vocabMasteryPercentage }}%</span>
+              <span>大纲 5530 词库</span>
+              <span class="text-blue-600 font-bold">{{ fullVocabList.length || 5530 }} 词</span>
             </div>
-            <div class="text-2xl font-black text-slate-900">{{ userData.masteredVocabIds.length }} <span class="text-xs font-normal text-slate-500">/ {{ vocabList.length }} 词</span></div>
+            <div class="text-2xl font-black text-slate-900">{{ userData.masteredVocabIds.length }} <span class="text-xs font-normal text-slate-500">已牢记</span></div>
             <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
-              <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500" :style="{ width: vocabMasteryPercentage + '%' }"></div>
+              <div class="bg-blue-600 h-1.5 rounded-full transition-all duration-500" :style="{ width: Math.max(2, vocabMasteryPercentage) + '%' }"></div>
             </div>
           </div>
 
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition-shadow">
             <div class="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
-              <span>政治刷题总量</span>
+              <span>政治全科刷题</span>
               <span class="text-emerald-600 font-bold">已答 {{ userData.quizStats.totalAttempted }} 题</span>
             </div>
             <div class="text-2xl font-black text-slate-900">{{ quizAccuracy }}% <span class="text-xs font-normal text-slate-500">正确率</span></div>
@@ -179,11 +179,11 @@
 
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition-shadow">
             <div class="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
-              <span>生词本沉淀</span>
-              <span class="text-amber-600 font-bold">待攻克</span>
+              <span>真题阅读精读</span>
+              <span class="text-indigo-600 font-bold">双语对照</span>
             </div>
-            <div class="text-2xl font-black text-amber-600">{{ userData.savedVocabIds.length }} <span class="text-xs font-normal text-slate-500">生词</span></div>
-            <p class="text-xs text-slate-400 mt-2">随时抽卡复习消灭生词</p>
+            <div class="text-2xl font-black text-indigo-600">{{ articleList.length }} <span class="text-xs font-normal text-slate-500">篇真题全文</span></div>
+            <p class="text-xs text-slate-400 mt-2">配套 5 道考研真题选择题测验</p>
           </div>
 
           <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow transition-shadow">
@@ -207,27 +207,27 @@
                 <span>考研英语复习主线</span>
               </div>
               <p class="text-xs text-slate-600 mb-4 leading-relaxed">
-                词汇是阅读理解的基石，长难句是读懂真题核心论点的钥匙，写作模板则是考场稳拿高分的利器。
+                考研 5530 词库已全面就绪，支持按 Unit 分单元循环刷词、历年真题出现频次查看，配套真题阅读全文精读与长难句剖析。
               </p>
               <div class="space-y-2">
+                <button @click="currentTab = 'english'; englishTab = 'fullVocab'" class="w-full bg-white hover:bg-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
+                  <span class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>🌟 大纲 5,530 全量词库 (Unit 分单元刷词 + 真实词频)</span>
+                  </span>
+                  <span>➔</span>
+                </button>
+                <button @click="currentTab = 'english'; englishTab = 'articles'" class="w-full bg-white hover:bg-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
+                  <span class="flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                    <span>📰 历年真题阅读全文双语精读 (段落对照 + 真题题测)</span>
+                  </span>
+                  <span>➔</span>
+                </button>
                 <button @click="currentTab = 'english'; englishTab = 'vocab'" class="w-full bg-white hover:bg-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
                   <span class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                    <span>背诵核心大纲高频词汇 (含真题例句与语音朗读)</span>
-                  </span>
-                  <span>➔</span>
-                </button>
-                <button @click="currentTab = 'english'; englishTab = 'sentences'" class="w-full bg-white hover:bg-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
-                  <span class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                    <span>历年真题长难句多维语法树精读</span>
-                  </span>
-                  <span>➔</span>
-                </button>
-                <button @click="currentTab = 'english'; englishTab = 'writing'" class="w-full bg-white hover:bg-blue-50 text-blue-900 border border-blue-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
-                  <span class="flex items-center space-x-2">
-                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                    <span>高分作文语料库与替换词字典</span>
+                    <span>📚 核心精选高频词汇 (含词根词缀助记与例句)</span>
                   </span>
                   <span>➔</span>
                 </button>
@@ -243,27 +243,27 @@
                 <span>考研政治突破主线</span>
               </div>
               <p class="text-xs text-slate-600 mb-4 leading-relaxed">
-                “政治得选择题者得天下，得多选者得高分”，主观分析题掌握黄金三步法框架，轻松稳上70+。
+                全科四大板块真题与模拟题库，配合考点全书与主观大题答题框架，系统覆盖考研政治各阶段备考重点。
               </p>
               <div class="space-y-2">
                 <button @click="currentTab = 'politics'; politicsTab = 'quiz'" class="w-full bg-white hover:bg-rose-50 text-rose-900 border border-rose-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
                   <span class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                    <span>历年真题精选题库刷题 (单选/多选题即时判分)</span>
+                    <span>🎯 全科真题与模拟刷题库 (单选/多选题即时判分)</span>
                   </span>
                   <span>➔</span>
                 </button>
-                <button @click="currentTab = 'politics'; politicsTab = 'flashcards'" class="w-full bg-white hover:bg-rose-50 text-rose-900 border border-rose-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
+                <button @click="currentTab = 'politics'; politicsTab = 'encyclopedia'" class="w-full bg-white hover:bg-rose-50 text-rose-900 border border-rose-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
                   <span class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                    <span>四大科目考点速记卡片 (3D翻转背诵)</span>
+                    <span>📖 四大科目考点全书 (系统化章节考点大纲)</span>
                   </span>
                   <span>➔</span>
                 </button>
                 <button @click="currentTab = 'politics'; politicsTab = 'essay'" class="w-full bg-white hover:bg-rose-50 text-rose-900 border border-rose-200 py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-between shadow-xs transition">
                   <span class="flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-red-600"></span>
-                    <span>主观分析题 (34-38题) 答题模板与采分万能句</span>
+                    <span>✍️ 主观分析题 (34-37题) 答题模板与采分万能句</span>
                   </span>
                   <span>➔</span>
                 </button>
@@ -289,25 +289,282 @@
       <div v-if="currentTab === 'english'" class="space-y-6">
         
         <!-- 英语子导航 -->
-        <div class="flex border-b border-slate-200 space-x-6 text-sm font-medium">
+        <div class="flex border-b border-slate-200 space-x-6 text-sm font-medium overflow-x-auto pb-1">
+          <button 
+            @click="englishTab = 'fullVocab'" 
+            :class="englishTab === 'fullVocab' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap flex items-center space-x-1">
+            <span>🌟 大纲 5,530 全量词库</span>
+            <span class="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded-full">Unit刷词</span>
+          </button>
+
+          <button 
+            @click="englishTab = 'articles'" 
+            :class="englishTab === 'articles' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap flex items-center space-x-1">
+            <span>📰 真题阅读全文精读</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 py-0.2 rounded-full">双语+真题题测</span>
+          </button>
+
           <button 
             @click="englishTab = 'vocab'" 
-            :class="englishTab === 'vocab' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
-            📚 核心词汇记忆 (SRS)
+            :class="englishTab === 'vocab' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
+            📚 核心精编高频词 (SRS)
           </button>
+
           <button 
             @click="englishTab = 'sentences'" 
-            :class="englishTab === 'sentences' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
-            🔍 历年真题长难句精读拆解
+            :class="englishTab === 'sentences' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
+            🔍 历年长难句精读拆解
           </button>
+
           <button 
             @click="englishTab = 'writing'" 
-            :class="englishTab === 'writing' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
+            :class="englishTab === 'writing' ? 'text-blue-600 border-b-2 border-blue-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
             ✍️ 高分写作语料与闪光词
           </button>
         </div>
 
-        <!-- 2.1 词汇记忆系统 -->
+        <!-- 2.0 考研大纲 5530 全量词库 (Unit 单元刷词与搜索) -->
+        <div v-if="englishTab === 'fullVocab'" class="space-y-6">
+          
+          <!-- 搜索与单元控制横幅 -->
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900 flex items-center space-x-2">
+                  <span>考研英语大纲 5,530 全量词库</span>
+                  <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold font-mono">共 {{ fullVocabList.length || 5530 }} 词</span>
+                </h3>
+                <p class="text-xs text-slate-500">按历年真题出现词频精准排序，支持 Unit 50 词一单元系统过词</p>
+              </div>
+
+              <!-- 搜索输入框 -->
+              <div class="relative w-full sm:w-72">
+                <input 
+                  v-model="fullVocabSearch" 
+                  type="text" 
+                  placeholder="实时搜索 5530 词 (如 economic 或 '经济')..."
+                  class="w-full text-xs px-3.5 py-2 pl-9 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                <span class="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
+              </div>
+            </div>
+
+            <!-- Unit 单元分页控制器 -->
+            <div class="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3 text-xs">
+              <div class="flex items-center space-x-2">
+                <button 
+                  @click="setFullVocabUnit(fullVocabCurrentUnit - 1)" 
+                  :disabled="fullVocabCurrentUnit <= 1"
+                  class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 font-semibold">
+                  ◀ 上一单元
+                </button>
+
+                <div class="flex items-center space-x-1 font-semibold text-slate-700">
+                  <span>单元 Unit</span>
+                  <select 
+                    v-model.number="fullVocabCurrentUnit" 
+                    class="bg-slate-100 border border-slate-300 rounded px-2 py-1 font-bold text-blue-700">
+                    <option v-for="u in totalUnits" :key="u" :value="u">Unit {{ u }} ({{ (u-1)*50 + 1 }}-{{ Math.min(u*50, searchedFullVocab.length) }})</option>
+                  </select>
+                  <span>/ {{ totalUnits }}</span>
+                </div>
+
+                <button 
+                  @click="setFullVocabUnit(fullVocabCurrentUnit + 1)" 
+                  :disabled="fullVocabCurrentUnit >= totalUnits"
+                  class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-40 font-semibold">
+                  下一单元 ▶
+                </button>
+              </div>
+
+              <span class="text-slate-400 font-mono">本单元显示 {{ currentUnitWords.length }} 词</span>
+            </div>
+          </div>
+
+          <!-- 5530 词汇卡片流 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div 
+              v-for="wordItem in currentUnitWords" 
+              :key="wordItem.id"
+              class="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs hover:border-blue-300 hover:shadow-sm transition space-y-3 flex flex-col justify-between">
+              
+              <div>
+                <!-- 词头行 -->
+                <div class="flex items-start justify-between">
+                  <div>
+                    <div class="flex items-center space-x-2">
+                      <span class="text-xs text-slate-400 font-mono">#{{ wordItem.index }}</span>
+                      <h4 class="text-xl font-black text-slate-900 tracking-tight font-serif">{{ wordItem.word }}</h4>
+                      <button @click="playWordAudio(wordItem.word)" class="text-xs text-blue-600 hover:underline p-1" title="朗读">🔊</button>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 mt-1">{{ wordItem.definition }}</div>
+                  </div>
+
+                  <div class="flex flex-col items-end space-y-1">
+                    <span v-if="wordItem.freq > 0" class="text-[10px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-mono font-semibold">
+                      考频: {{ wordItem.freq }}
+                    </span>
+                    <span v-if="wordItem.examCount > 0" class="text-[10px] px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 font-mono font-semibold">
+                      真题 {{ wordItem.examCount }} 次
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 例句 -->
+                <div v-if="wordItem.sentence" class="mt-3 p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1">
+                  <p class="text-slate-800 font-medium italic">"{{ wordItem.sentence }}"</p>
+                  <p class="text-slate-500 text-[11px]">{{ wordItem.translation }}</p>
+                </div>
+              </div>
+
+              <!-- 操作行 -->
+              <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                <span class="text-slate-400 text-[11px]">{{ wordItem.category }}</span>
+                <div class="flex items-center space-x-2">
+                  <button 
+                    @click="toggleSaveVocab(wordItem)"
+                    :class="userData.savedVocabIds.includes(wordItem.id) ? 'text-amber-600 font-bold' : 'text-slate-400 hover:text-slate-600'"
+                    class="transition">
+                    {{ userData.savedVocabIds.includes(wordItem.id) ? '★ 已在生词本' : '☆ 加生词本' }}
+                  </button>
+                  <button 
+                    @click="markVocabMastered(wordItem.id)"
+                    :class="userData.masteredVocabIds.includes(wordItem.id) ? 'text-emerald-600 font-bold' : 'text-slate-400 hover:text-blue-600'"
+                    class="transition">
+                    {{ userData.masteredVocabIds.includes(wordItem.id) ? '✔ 已掌握' : '标为熟记' }}
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 2.1 历年真题阅读全文精读 (Reading Comprehension) -->
+        <div v-if="englishTab === 'articles'" class="space-y-6">
+          
+          <!-- 文章切换标签 -->
+          <div class="flex items-center space-x-2 overflow-x-auto pb-2">
+            <button 
+              v-for="(art, idx) in articleList" 
+              :key="art.id"
+              @click="selectArticle(idx)"
+              :class="selectedArticleIndex === idx ? 'bg-indigo-600 text-white font-bold' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'"
+              class="px-4 py-2 rounded-xl text-xs whitespace-nowrap transition flex items-center space-x-1.5">
+              <span>📄</span>
+              <span>{{ art.title }} ({{ art.topic }})</span>
+            </button>
+          </div>
+
+          <!-- 文章主体内容卡片 -->
+          <div v-if="currentArticle" class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
+            
+            <!-- 头部出处与主题 -->
+            <div class="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="text-xs px-2.5 py-0.5 rounded bg-indigo-50 text-indigo-700 font-bold border border-indigo-200">
+                  {{ currentArticle.source }}
+                </span>
+                <h3 class="text-xl font-black text-slate-900 mt-2">{{ currentArticle.title }}</h3>
+                <p class="text-xs text-slate-500 mt-1">主题核心：{{ currentArticle.topic }}</p>
+              </div>
+            </div>
+
+            <!-- 段落逐段双语精读展示 -->
+            <div class="space-y-6">
+              <div 
+                v-for="para in currentArticle.paragraphs" 
+                :key="para.paraNum"
+                class="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-3">
+                
+                <div class="flex items-center space-x-2">
+                  <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold font-mono">
+                    {{ para.paraNum }}
+                  </span>
+                  <span class="text-xs font-bold text-slate-600">Paragraph {{ para.paraNum }} (第 {{ para.paraNum }} 自然段)</span>
+                </div>
+
+                <!-- 英文原段 -->
+                <p class="text-base text-slate-900 leading-relaxed font-serif tracking-normal">
+                  {{ para.en }}
+                </p>
+
+                <!-- 中文译文 -->
+                <p class="text-xs text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2">
+                  {{ para.zh }}
+                </p>
+
+                <!-- 重点词汇 -->
+                <div v-if="para.vocab && para.vocab.length" class="flex flex-wrap gap-2 pt-1 text-[11px]">
+                  <span class="text-slate-400 font-semibold">📌 段落生词：</span>
+                  <span v-for="(v, vIdx) in para.vocab" :key="vIdx" class="px-2 py-0.5 rounded bg-white border border-slate-200 text-indigo-700">
+                    {{ v }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 配套真题测验与解题逻辑 -->
+            <div class="border-t-2 border-slate-100 pt-6 space-y-6">
+              <div class="flex items-center space-x-2">
+                <span class="text-lg">🎯</span>
+                <h4 class="text-base font-extrabold text-slate-900">真题阅读配套客观题深度剖析</h4>
+              </div>
+
+              <div class="space-y-5">
+                <div 
+                  v-for="(q, qIdx) in currentArticle.questions" 
+                  :key="q.id"
+                  class="p-5 rounded-xl border border-slate-200 bg-white shadow-xs space-y-3">
+                  
+                  <div class="text-sm font-bold text-slate-900 flex items-start space-x-2">
+                    <span class="text-indigo-600 font-mono">Q{{ qIdx + 1 }}.</span>
+                    <span>{{ q.question }}</span>
+                  </div>
+
+                  <!-- 选项列表 -->
+                  <div class="space-y-2">
+                    <button 
+                      v-for="opt in q.options" 
+                      :key="opt.label"
+                      @click="submitArticleQuestion(q.id, opt.label, q.answer)"
+                      :class="[
+                        articleQuizSubmitted[q.id] && opt.label === q.answer
+                          ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-bold'
+                          : articleQuizSubmitted[q.id] && userArticleAnswers[q.id] === opt.label
+                            ? 'border-rose-400 bg-rose-50 text-rose-950'
+                            : userArticleAnswers[q.id] === opt.label
+                              ? 'border-indigo-600 bg-indigo-50/50'
+                              : 'border-slate-200 hover:bg-slate-50 text-slate-700'
+                      ]"
+                      class="w-full p-3 rounded-lg border text-left text-xs flex items-center space-x-3 transition">
+                      <span class="w-6 h-6 rounded flex items-center justify-center font-mono font-bold shrink-0"
+                            :class="articleQuizSubmitted[q.id] && opt.label === q.answer ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'">
+                        {{ opt.label }}
+                      </span>
+                      <span>{{ opt.text }}</span>
+                    </button>
+                  </div>
+
+                  <!-- 答题解析 -->
+                  <div v-if="articleQuizSubmitted[q.id]" class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1">
+                    <span class="font-bold text-emerald-700">正确答案：{{ q.answer }}</span>
+                    <p class="text-slate-600 leading-relaxed">{{ q.analysis }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- 2.2 核心词汇记忆系统 (SRS 卡片) -->
         <div v-if="englishTab === 'vocab'" class="space-y-6 max-w-3xl mx-auto">
           
           <!-- 筛选与进度 -->
@@ -317,7 +574,7 @@
               <button 
                 @click="vocabFilter = 'all'; vocabIndex = 0"
                 :class="vocabFilter === 'all' ? 'bg-blue-600 text-white font-bold' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'"
-                class="px-2.5 py-1 rounded-md whitespace-nowrap transition">全部 ({{ vocabList.length }})</button>
+                class="px-2.5 py-1 rounded-md whitespace-nowrap transition">全部 ({{ coreVocabList.length }})</button>
               <button 
                 v-for="cat in ['高频动词', '高频名词', '高频形容词', '写作亮点词', '熟词僻义']"
                 :key="cat"
@@ -365,16 +622,14 @@
               </button>
             </div>
 
-            <!-- 词义卡片（可收起展开） -->
+            <!-- 词义卡片 -->
             <div class="border-t border-slate-100 pt-5 space-y-4">
               
-              <!-- 核心释义 -->
               <div class="flex items-baseline space-x-3">
                 <span class="text-xs font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-mono">{{ currentVocab.pos }}</span>
                 <span class="text-lg font-bold text-slate-800">{{ currentVocab.definition }}</span>
               </div>
 
-              <!-- 词根助记 -->
               <div class="p-3.5 bg-blue-50/60 rounded-xl border border-blue-100 text-xs text-blue-900 space-y-1">
                 <div class="font-bold flex items-center space-x-1 text-blue-800">
                   <span>💡</span>
@@ -383,7 +638,6 @@
                 <p class="leading-relaxed">{{ currentVocab.root }}</p>
               </div>
 
-              <!-- 常用真题搭配与近义词 -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div class="bg-slate-50 p-3 rounded-lg border border-slate-200/60">
                   <span class="font-bold text-slate-600 block mb-1">🔗 考研高频搭配：</span>
@@ -401,7 +655,6 @@
                 </div>
               </div>
 
-              <!-- 真题例句与翻译 -->
               <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100 space-y-1.5 text-xs">
                 <span class="font-bold text-amber-900">📖 考研真题语境：</span>
                 <p class="text-slate-800 font-medium italic text-sm leading-relaxed">
@@ -430,7 +683,7 @@
                   🤔 记不清 (入生词本)
                 </button>
                 <button 
-                  @click="markVocabMastered" 
+                  @click="markVocabMastered()" 
                   class="px-5 py-2 rounded-xl bg-blue-600 text-white text-xs font-bold hover:bg-blue-700 shadow-sm transition">
                   ✨ 熟记掌握 (+1)
                 </button>
@@ -451,10 +704,8 @@
 
         </div>
 
-        <!-- 2.2 长难句精读分析实验室 -->
+        <!-- 2.3 长难句精读分析实验室 -->
         <div v-if="englishTab === 'sentences'" class="space-y-6">
-          
-          <!-- 句子选择列表 -->
           <div class="flex items-center space-x-2 overflow-x-auto pb-2">
             <button 
               v-for="(sent, idx) in sentenceList" 
@@ -466,10 +717,7 @@
             </button>
           </div>
 
-          <!-- 长难句剖析主体卡片 -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
-            
-            <!-- 来源出处 -->
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
               <span class="text-xs px-2.5 py-1 rounded bg-slate-100 text-slate-700 font-semibold font-mono">
                 📌 {{ currentSentence.source }}
@@ -477,10 +725,9 @@
               <span class="text-xs text-blue-600 font-medium">主题：{{ currentSentence.topic }}</span>
             </div>
 
-            <!-- 原句展示（支持切换整体原句 vs 彩色语法成分拆解） -->
             <div class="space-y-3">
               <div class="flex items-center justify-between text-xs text-slate-500">
-                <span class="font-bold text-slate-700">真题原句 (点击语法块可查看所属成分)：</span>
+                <span class="font-bold text-slate-700">真题原句：</span>
                 <button 
                   @click="showSentenceBreakdown = !showSentenceBreakdown"
                   class="text-blue-600 font-semibold hover:underline">
@@ -488,7 +735,6 @@
                 </button>
               </div>
 
-              <!-- 语法色块拆解视图 -->
               <div v-if="showSentenceBreakdown" class="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 leading-loose text-base">
                 <span 
                   v-for="(token, i) in currentSentence.tokens" 
@@ -501,13 +747,11 @@
                 </span>
               </div>
 
-              <!-- 纯文本视图 -->
               <div v-else class="p-5 bg-slate-50 rounded-xl border border-slate-200 text-base font-serif italic text-slate-800 leading-relaxed">
                 "{{ currentSentence.sentence }}"
               </div>
             </div>
 
-            <!-- 自我翻译测试沙盒 -->
             <div class="p-4 bg-blue-50/40 rounded-xl border border-blue-100 space-y-3">
               <div class="flex items-center justify-between text-xs font-bold text-blue-900">
                 <span>📝 试一试：输入您的翻译版本</span>
@@ -522,14 +766,12 @@
                 placeholder="尝试用通顺规范的学术汉语翻译本长难句..."
                 class="w-full text-xs p-3 rounded-lg border border-blue-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"></textarea>
 
-              <!-- 权威翻译 -->
               <div v-if="showSentenceTranslation" class="p-3 bg-white rounded-lg border border-emerald-200 text-xs text-emerald-900 space-y-1">
                 <span class="font-bold text-emerald-800">🎯 官方参考译文：</span>
                 <p class="leading-relaxed">{{ currentSentence.translation }}</p>
               </div>
             </div>
 
-            <!-- 名师长难句结构精析 -->
             <div class="space-y-2">
               <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">🔬 语法结构与考点名师拆解</h4>
               <ul class="space-y-1.5 text-xs text-slate-700">
@@ -540,7 +782,6 @@
               </ul>
             </div>
 
-            <!-- 核心词汇注释 -->
             <div class="border-t border-slate-100 pt-3">
               <span class="text-xs font-bold text-slate-600 block mb-2">📌 句中关键生词释义：</span>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
@@ -550,15 +791,11 @@
                 </div>
               </div>
             </div>
-
           </div>
-
         </div>
 
-        <!-- 2.3 高分写作语料库 -->
+        <!-- 2.4 高分写作语料库 -->
         <div v-if="englishTab === 'writing'" class="space-y-6">
-          
-          <!-- 闪光词搜索与替换工具 -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
@@ -593,10 +830,8 @@
             </div>
           </div>
 
-          <!-- 作文通用框架模版 -->
           <div class="space-y-4">
             <h3 class="text-base font-extrabold text-slate-900">📑 考研大小作文黄金三段式模版</h3>
-            
             <div v-for="(tpl, idx) in writingArsenal.templates" :key="idx" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
               <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div>
@@ -621,7 +856,6 @@
               </div>
             </div>
           </div>
-
         </div>
 
       </div>
@@ -630,21 +864,31 @@
       <div v-if="currentTab === 'politics'" class="space-y-6">
         
         <!-- 政治子导航 -->
-        <div class="flex border-b border-slate-200 space-x-6 text-sm font-medium">
+        <div class="flex border-b border-slate-200 space-x-6 text-sm font-medium overflow-x-auto pb-1">
           <button 
             @click="politicsTab = 'quiz'" 
-            :class="politicsTab === 'quiz' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
+            :class="politicsTab === 'quiz' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
             🎯 真题精选刷题 (单选/多选)
           </button>
           <button 
+            @click="politicsTab = 'encyclopedia'" 
+            :class="politicsTab === 'encyclopedia' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap flex items-center space-x-1">
+            <span>📖 全科考点全书</span>
+            <span class="text-[10px] bg-rose-100 text-rose-700 px-1.5 py-0.2 rounded-full">高频背诵</span>
+          </button>
+          <button 
             @click="politicsTab = 'flashcards'" 
-            :class="politicsTab === 'flashcards' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
+            :class="politicsTab === 'flashcards' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
             📇 四大科目考点速记卡片
           </button>
           <button 
             @click="politicsTab = 'essay'" 
-            :class="politicsTab === 'essay' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'">
-            ✍️ 34-38题主观大题答题万能模板
+            :class="politicsTab === 'essay' ? 'text-rose-600 border-b-2 border-rose-600 pb-2 font-bold' : 'text-slate-500 hover:text-slate-800 pb-2'"
+            class="whitespace-nowrap">
+            ✍️ 34-37题主观大题答题模板
           </button>
         </div>
 
@@ -669,8 +913,6 @@
 
           <!-- 刷题卡片主体 -->
           <div v-if="currentQuiz" class="bg-white rounded-2xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-6">
-            
-            <!-- 题目标签行 -->
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-2">
                 <span class="text-xs px-2.5 py-1 rounded-md font-bold" 
@@ -687,7 +929,6 @@
               </span>
             </div>
 
-            <!-- 题干描述 -->
             <div class="text-base font-bold text-slate-900 leading-relaxed">
               {{ currentQuiz.question }}
             </div>
@@ -700,7 +941,6 @@
                 @click="selectOption(opt.label)"
                 :disabled="hasSubmittedQuiz"
                 :class="[
-                  // 提交后的颜色判定
                   hasSubmittedQuiz && (currentQuiz.type === 'single' ? opt.label === currentQuiz.answer : currentQuiz.answer.includes(opt.label))
                     ? 'border-emerald-500 bg-emerald-50 text-emerald-950 font-semibold'
                     : hasSubmittedQuiz && (currentQuiz.type === 'single' ? opt.label === selectedSingleOption : selectedMultiOptions.includes(opt.label))
@@ -739,8 +979,6 @@
 
             <!-- 答题后名师详细解析与陷阱提示 -->
             <div v-if="hasSubmittedQuiz" class="border-t border-slate-100 pt-5 space-y-4">
-              
-              <!-- 结果状态横幅 -->
               <div :class="isQuizAnswerCorrect ? 'bg-emerald-50 text-emerald-900 border-emerald-200' : 'bg-rose-50 text-rose-900 border-rose-200'" class="p-3.5 rounded-xl border flex items-center justify-between text-xs">
                 <span class="font-bold flex items-center space-x-1.5">
                   <span>{{ isQuizAnswerCorrect ? '🎉 恭喜回答正确！' : '❌ 很遗憾回答错误！' }}</span>
@@ -750,23 +988,20 @@
                 </span>
               </div>
 
-              <!-- 考点精解 -->
               <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
                 <span class="font-bold text-slate-800 block">📚 考点名师精解：</span>
                 <p class="text-slate-700 leading-relaxed">{{ currentQuiz.analysis }}</p>
               </div>
 
-              <!-- 命题陷阱预警 -->
               <div class="p-4 bg-amber-50/70 rounded-xl border border-amber-200 space-y-1.5 text-xs text-amber-900">
                 <span class="font-bold text-amber-800">⚠️ 考研命题高频陷阱指引：</span>
                 <p class="leading-relaxed">{{ currentQuiz.trap }}</p>
               </div>
-
             </div>
 
             <!-- 下一题控制按钮 -->
             <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-              <span class="text-xs text-slate-400">研途宝 · 客观题冲刺题库</span>
+              <span class="text-xs text-slate-400">研途宝 · 全科题库</span>
               <button 
                 @click="nextQuiz" 
                 class="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 shadow-sm transition">
@@ -782,15 +1017,64 @@
 
         </div>
 
-        <!-- 3.2 考点速记卡片 (Flashcards) -->
+        <!-- 3.2 考研政治核心考点全书 (Encyclopedia) -->
+        <div v-if="politicsTab === 'encyclopedia'" class="space-y-6">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900 flex items-center space-x-2">
+                <span>考研政治全科核心考点全书</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 font-semibold">权威精编考纲</span>
+              </h3>
+              <p class="text-xs text-slate-500">马原、毛中特与新时代、史纲、思修四大科目高频命题脉络梳理</p>
+            </div>
+
+            <!-- 搜索框 -->
+            <input 
+              v-model="encyclopediaSearch" 
+              type="text" 
+              placeholder="搜索考点 (如 '矛盾'、'新质生产力')..."
+              class="text-xs px-3.5 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-rose-500 w-full sm:w-64 bg-slate-50">
+          </div>
+
+          <!-- 科目切换按钮 -->
+          <div class="flex items-center space-x-2 overflow-x-auto pb-1">
+            <button 
+              v-for="(sub, idx) in politicsEncyclopedia" 
+              :key="idx"
+              @click="encyclopediaSubjectIndex = idx"
+              :class="encyclopediaSubjectIndex === idx ? 'bg-rose-600 text-white font-bold' : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'"
+              class="px-4 py-2 rounded-xl text-xs whitespace-nowrap transition">
+              {{ sub.subject }}
+            </button>
+          </div>
+
+          <!-- 章节与考点列表 -->
+          <div class="space-y-4">
+            <div 
+              v-for="(sec, sIdx) in filteredEncyclopediaSections" 
+              :key="sIdx"
+              class="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+              <h4 class="text-base font-bold text-slate-900 flex items-center space-x-2 border-b border-slate-100 pb-2">
+                <span class="text-rose-600 font-mono">#{{ sIdx + 1 }}</span>
+                <span>{{ sec.title }}</span>
+              </h4>
+              <ul class="space-y-2 text-xs text-slate-700 leading-relaxed">
+                <li v-for="(p, pIdx) in sec.points" :key="pIdx" class="flex items-start space-x-2">
+                  <span class="text-rose-500 font-bold">•</span>
+                  <span>{{ p }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3.3 考点速记卡片 (Flashcards) -->
         <div v-if="politicsTab === 'flashcards'" class="space-y-6 max-w-2xl mx-auto">
-          
           <div class="text-center space-y-1">
             <h3 class="text-base font-extrabold text-slate-900">📇 政治四大科目核心考点速记卡</h3>
             <p class="text-xs text-slate-500">点击卡片即可 3D 翻转查看答案与解析，强化记忆回想（Active Recall）</p>
           </div>
 
-          <!-- 翻转卡片容器 -->
           <div 
             class="flip-card-container w-full h-80 cursor-pointer"
             :class="{ 'is-flipped': isFlashcardFlipped }"
@@ -837,7 +1121,6 @@
             </div>
           </div>
 
-          <!-- 控制操作按钮 -->
           <div class="flex items-center justify-between gap-3 pt-2">
             <button 
               @click="prevFlashcard" 
@@ -858,15 +1141,14 @@
               下一个考点
             </button>
           </div>
-
         </div>
 
-        <!-- 3.3 主观分析题 (34-38题) 答题模板 -->
+        <!-- 3.4 主观大题模板 -->
         <div v-if="politicsTab === 'essay'" class="space-y-6">
           <div class="bg-gradient-to-r from-rose-900 to-slate-900 text-white p-6 rounded-2xl shadow-md space-y-2">
             <h3 class="text-lg font-black tracking-tight">🏆 政治五大主观大题（每题10分，共50分）高分采分结构</h3>
             <p class="text-xs text-rose-200 leading-relaxed">
-              考研政治阅卷实行采点给分制。只要踩准“原理原话 + 材料结合点 + 实践方法论”，就能稳稳拿下8分以上高分区间！
+              考研政治阅卷实行采点给分制。踩准“原理原话 + 材料结合点 + 实践方法论”，稳拿高分区间！
             </p>
           </div>
 
@@ -888,7 +1170,6 @@
                   📐 答题公式：{{ essay.formula }}
                 </div>
 
-                <!-- 具体步骤 -->
                 <div class="space-y-2.5">
                   <div v-for="(st, sIdx) in essay.steps" :key="sIdx" class="p-3 bg-slate-50 rounded-xl border border-slate-200/60 space-y-1 text-xs">
                     <span class="font-bold text-slate-800 block">{{ st.step }}</span>
@@ -914,7 +1195,6 @@
       <!-- ================================= 视图 4：错题与生词本 (NOTEBOOK) ================================= -->
       <div v-if="currentTab === 'notebook'" class="space-y-6">
         
-        <!-- 笔记本切换 Tab -->
         <div class="flex border-b border-slate-200 space-x-6 text-sm font-medium">
           <button 
             @click="notebookTab = 'wrongQuestions'" 
@@ -932,8 +1212,8 @@
         <div v-if="notebookTab === 'wrongQuestions'" class="space-y-4">
           <div v-if="wrongQuestionObjects.length === 0" class="text-center py-16 bg-white rounded-2xl border border-slate-200 space-y-2">
             <span class="text-4xl">🎉</span>
-            <div class="text-sm font-bold text-slate-800">太棒了！当前没有任何政治错题！</div>
-            <p class="text-xs text-slate-500">前往“考研政治”模块多刷几道多选题，检验备考成果吧。</p>
+            <div class="text-sm font-bold text-slate-800">当前没有任何政治错题！</div>
+            <p class="text-xs text-slate-500">前往“考研政治”模块多刷几道多选题，检验备考成果。</p>
           </div>
 
           <div v-else class="space-y-4">
@@ -967,7 +1247,7 @@
           <div v-if="savedVocabObjects.length === 0" class="text-center py-16 bg-white rounded-2xl border border-slate-200 space-y-2">
             <span class="text-4xl">🌟</span>
             <div class="text-sm font-bold text-slate-800">生词本空空如也！</div>
-            <p class="text-xs text-slate-500">在“考研英语 - 核心词汇记忆”中点击“加生词本”，集中攻克生僻词汇。</p>
+            <p class="text-xs text-slate-500">在大纲 5530 词库或核心词汇中点击“☆ 加生词本”，集中攻克生僻词汇。</p>
           </div>
 
           <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -980,10 +1260,10 @@
                   <h4 class="text-xl font-black text-slate-900 font-mono">{{ sv.word }}</h4>
                   <button @click="playWordAudio(sv.word)" class="text-xs text-blue-600 hover:underline">🔊</button>
                 </div>
-                <div class="text-xs text-slate-500 font-mono mt-0.5">{{ sv.phonetic }}</div>
-                <div class="text-sm font-bold text-slate-800 mt-2">{{ sv.pos }} {{ sv.definition }}</div>
-                <div class="text-xs text-slate-500 mt-2 bg-slate-50 p-2 rounded border border-slate-100">
-                  {{ sv.root }}
+                <div class="text-xs text-slate-500 font-mono mt-0.5">{{ sv.phonetic || sv.cefr }}</div>
+                <div class="text-sm font-bold text-slate-800 mt-2">{{ sv.pos || '' }} {{ sv.definition }}</div>
+                <div v-if="sv.sentence" class="text-xs text-slate-500 mt-2 bg-slate-50 p-2 rounded border border-slate-100">
+                  "{{ sv.sentence }}"
                 </div>
               </div>
 
@@ -1004,7 +1284,7 @@
 
     <!-- 底部版权与备考指引 -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500 space-y-1">
-      <div>研途宝 · 考研英语与考研政治全能备战平台 (v1.0 交互版)</div>
+      <div>研途宝 · 考研英语与考研政治全能备战平台 (v2.0 全景真题增强版)</div>
       <div class="text-slate-400">坚持每天复习一点点，一战成硕，金榜题名！</div>
     </footer>
 
@@ -1025,6 +1305,7 @@
   </div>
 
   <!-- 引入外部数据与业务逻辑 -->
+  <script src="js/kaoyan-vocab-5500.js"></script>
   <script src="js/english-data.js"></script>
   <script src="js/politics-data.js"></script>
   <script src="js/app.js"></script>

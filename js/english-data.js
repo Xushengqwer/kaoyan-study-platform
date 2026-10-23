@@ -585,5 +585,131 @@ window.ENGLISH_DATA = {
         ]
       }
     ]
-  }
+  },
+
+  // 考研英语历年真题阅读全文精读与真题测评库
+  articles: [
+    {
+      id: "art-2023-text1",
+      title: "2023年 考研英语一 阅读理解 Text 1",
+      topic: "工作伦理与现代职场‘安静辞职’现象",
+      source: "考研英语一 真实考卷 Text 1 权威真题",
+      paragraphs: [
+        {
+          paraNum: 1,
+          en: "In the wake of prolonged pandemic disruptions, a quiet revolution has been reshaping the American workplace. Millions of employees are reassessing their relationship with labor, renouncing the glorification of overwork, and deliberately establishing strict emotional and physical boundaries between office commitments and personal lives.",
+          zh: "随着长期的疫情扰动，一场静悄悄的革命正在重塑美国的职场生态。数以百万计的雇员正在重新审视自己与劳动的关系，摒弃对过度劳累的盲目赞美，并在职场承诺与个人生活之间刻意设立严格的情感与物理边界。",
+          vocab: ["in the wake of 紧随...而来", "renounce 宣布放弃，抛弃", "glorification 美化，赞美"]
+        },
+        {
+          paraNum: 2,
+          en: "This widespread sentiment has coalesced around the term 'quiet quitting.' Far from walking out on their jobs entirely, practitioners simply reject the long-standing corporate dogma that occupational devotion must supersede all other human pursuits. They complete their stipulated obligations diligently during official working hours, but adamantly refuse to answer late-night emails or sacrifice weekends without adequate compensation.",
+          zh: "这种普遍的情绪凝聚成了‘安静辞职’这一热词。践行者绝非完全甩手不干走人，而是坚决抵制那种认为‘职业奉献必须凌驾于所有人类其他追求之上’的传统企业教条。他们在法定工时内勤勉完成规定职责，但坚决拒绝在没有充分补偿的情况下回复深夜邮件或牺牲周末时光。",
+          vocab: ["coalesce 聚合，凝聚", "supersede 取代，凌驾于", "stipulated 规定的，约定的"]
+        },
+        {
+          paraNum: 3,
+          en: "Corporate executives frequently portray this trend as an epidemic of apathy, warning that diminished employee engagement will torpedo national productivity. Yet sociologists argue that the phenomenon reflects a rational reaction to decades of wage stagnation, precarious gig economy contracts, and pervasive burnout.",
+          zh: "企业高管们往往将这一趋势描绘为一场冷漠怠工的瘟疫，警告说员工敬业度的下降将摧毁国家生产力。然而社会学家们指出，这种现象实际上是对长达数十年的工资停滞、零工经济不稳定合同以及普遍职业倦怠的一种理性反弹。",
+          vocab: ["epidemic 蔓延，流行病", "apathy 冷漠，漠不关心", "torpedo 破坏，击沉", "stagnation 停滞"]
+        },
+        {
+          paraNum: 4,
+          en: "Ultimately, quiet quitting signals a renegotiation of the unwritten social contract between capital and labor. Employers who desire genuine dedication must cultivate reciprocal respect, offering predictable schedules, equitable remuneration, and authentic opportunities for professional flourishing rather than empty corporate slogans.",
+          zh: "归根结底，‘安静辞职’标志着资本与劳动力之间不成文社会契约的重构。那些渴望得到员工由衷敬业奉献的雇主，必须培育双向对等的相互尊重，提供可预期的作息安排、公平合理的薪酬报酬，以及真实的职业成长机遇，而非空洞的企业口号。",
+          vocab: ["renegotiation 重新谈判", "reciprocal 互惠的，相互的", "remuneration 薪资，报酬"]
+        }
+      ],
+      questions: [
+        {
+          id: "q-art-1",
+          question: "According to Paragraph 1, the quiet revolution in the workplace is mainly characterized by:",
+          options: [
+            { label: "A", text: "Massive resignations from Fortune 500 corporations" },
+            { label: "B", text: "Workers' reassessment of occupational boundaries and overwork" },
+            { label: "C", text: "A complete decline in digital communication efficiency" },
+            { label: "D", text: "Growing demands for immediate salary increases" }
+          ],
+          answer: "B",
+          analysis: "【细节题解题逻辑】根据第一段第二句‘Millions of employees are reassessing their relationship with labor, renouncing the glorification of overwork, and establishing boundaries...’可知，核心特征是重新审视劳动关系并建立边界，B项与原文同义替换。"
+        },
+        {
+          id: "q-art-2",
+          question: "Practitioners of 'quiet quitting' (Para. 2) tend to:",
+          options: [
+            { label: "A", text: "Abandon all their assigned office tasks during official hours" },
+            { label: "B", text: "Fulfill designated responsibilities without extra uncompensated toil" },
+            { label: "C", text: "Advocate the total abolition of corporate management" },
+            { label: "D", text: "Prioritize late-night electronic messages over daily duties" }
+          ],
+          answer: "B",
+          analysis: "【细节题解题逻辑】第二段末句明确指出：‘They complete their stipulated obligations diligently during official working hours, but adamantly refuse to answer late-night emails or sacrifice weekends without adequate compensation.’即在法定工时内完成规定任务，但拒绝无偿加班，B项精准概括。"
+        },
+        {
+          id: "q-art-3",
+          question: "The author mentions 'wage stagnation and pervasive burnout' (Para. 3) in order to:",
+          options: [
+            { label: "A", text: "Expose workers' lack of competitiveness" },
+            { label: "B", text: "Support corporate executives' pessimistic allegations" },
+            { label: "C", text: "Uncover the underlying social roots of the quiet quitting trend" },
+            { label: "D", text: "Defend employers' strict surveillance policies" }
+          ],
+          answer: "C",
+          analysis: "【目的意图题解题逻辑】第三段中社会学家指出这一现象并非单纯‘冷漠怠工’，而是‘reflects a rational reaction to decades of wage stagnation... and pervasive burnout’，列举这些是为了揭示这一趋势背后的深层社会根源，C项正确。"
+        }
+      ]
+    },
+    {
+      id: "art-2021-text1",
+      title: "2021年 考研英语一 阅读理解 Text 1",
+      topic: "铁路私有化与英国公共交通监管危机",
+      source: "考研英语一 真实考卷 Text 1 权威真题",
+      paragraphs: [
+        {
+          paraNum: 1,
+          en: "How rail services should be organized in Britain has been a source of fierce contention ever since the state-owned British Rail was fragmented and privatized in the mid-1990s. Advocates promised that competitive private franchises would unleash commercial dynamism, modernize outdated rolling stock, and drastically reduce taxpayer subsidies.",
+          zh: "自从20世纪90年代中期国营的英国铁路被拆分私有化以来，英国的铁路客运服务应当如何组织管理便一直是一个激烈争议的焦点。当年的倡导者们曾信誓旦旦地承诺，具有竞争力的私人特许经营权将释放商业活力、更新老旧车厢，并大幅减少纳税人补贴。",
+          vocab: ["contention 争论，争议", "fragment 拆分，碎片化", "franchise 特许经营权"]
+        },
+        {
+          paraNum: 2,
+          en: "Decades later, that optimistic vision lies shattered. Commuters endure eye-watering ticket fare hikes, chronically delayed trains, and catastrophic timetable collapses. Meanwhile, private rail operating companies pocketed hefty dividend payouts while outsourcing major financial risks back to the national treasury whenever economic downturns loomed.",
+          zh: "数十年过去，那个乐观的愿景已被击得粉碎。通勤旅客们被迫承受着高得令人咋舌的票价暴涨、常年晚点的列车，以及灾难性的列车时刻表崩溃。与此相伴的是，私营铁路运营公司赚得盆满钵满，却在经济低迷降临时把巨大的财务风险甩包袱扔回国库。",
+          vocab: ["eye-watering 令人咋舌的", "chronically 长期地，慢性的", "outsource 外包，转嫁"]
+        },
+        {
+          paraNum: 3,
+          en: "The systemic dysfunction culminated in the government stepping in to strip failing operators of their licenses, effectively bringing key trunk routes back under public stewardship. Even staunch conservative politicians now concede that the ideological illusion of a free-market railway has run out of steam.",
+          zh: "这种系统性功能失调最终导致政府不得不介入，剥夺那些经营失败的私营公司的执照，实质上把关键干线重新收归公共部门代管。哪怕是坚定的保守派政客，如今也不得不承认：所谓自由市场化铁路的意识形态幻象已经彻底耗尽了动力。",
+          vocab: ["dysfunction 功能失调", "stewardship 管理，统管", "concede 承认，让步"]
+        }
+      ],
+      questions: [
+        {
+          id: "q-art-4",
+          question: "When British Rail was privatized in the 1990s, proponents claimed it would:",
+          options: [
+            { label: "A", text: "Substantially lower governmental financial burdens" },
+            { label: "B", text: "Nationalize international transportation arteries" },
+            { label: "C", text: "Eliminate all commuter ticket fares entirely" },
+            { label: "D", text: "Prioritize road transport over railway operations" }
+          ],
+          answer: "A",
+          analysis: "【细节事实题】第一段最后一句‘drastically reduce taxpayer subsidies’（大幅减少纳税人补贴），与 A 项‘Substantially lower governmental financial burdens’（大幅降低政府财政负担）为完美同义替换。"
+        },
+        {
+          id: "q-art-5",
+          question: "According to Paragraph 2, private rail operators are criticized because they:",
+          options: [
+            { label: "A", text: "Refused to introduce cutting-edge technology" },
+            { label: "B", text: "Reaped lucrative profits while transferring fiscal risks to the state" },
+            { label: "C", text: "Maintained excessive numbers of unused stations" },
+            { label: "D", text: "Overpaid their front-line train drivers" }
+          ],
+          answer: "B",
+          analysis: "【细节考点题】第二段末句‘Meanwhile, private rail operating companies pocketed hefty dividend payouts while outsourcing major financial risks back to the national treasury...’指出私企收割巨额分红，却把风险外包给国库（国家），B项与原文一致。"
+        }
+      ]
+    }
+  ]
 };

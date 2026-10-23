@@ -5,17 +5,20 @@ createApp({
   setup() {
     // 导航状态管理
     const currentTab = ref('dashboard'); // 'dashboard' | 'english' | 'politics' | 'notebook'
-    const englishTab = ref('vocab'); // 'vocab' | 'sentences' | 'writing'
-    const politicsTab = ref('quiz'); // 'quiz' | 'flashcards' | 'essay'
+    const englishTab = ref('vocab'); // 'vocab' | 'fullVocab' | 'articles' | 'sentences' | 'writing'
+    const politicsTab = ref('quiz'); // 'quiz' | 'flashcards' | 'encyclopedia' | 'essay'
     const notebookTab = ref('wrongQuestions'); // 'wrongQuestions' | 'vocabList'
 
     // 数据源引用
-    const vocabList = ref(window.ENGLISH_DATA?.vocabulary || []);
+    const coreVocabList = ref(window.ENGLISH_DATA?.vocabulary || []);
+    const fullVocabList = ref(window.KAOYAN_FULL_VOCAB || []);
     const sentenceList = ref(window.ENGLISH_DATA?.sentences || []);
+    const articleList = ref(window.ENGLISH_DATA?.articles || []);
     const writingArsenal = ref(window.ENGLISH_DATA?.writingArsenal || {});
 
     const quizList = ref(window.POLITICS_DATA?.questions || []);
     const flashcardList = ref(window.POLITICS_DATA?.flashcards || []);
+    const politicsEncyclopedia = ref(window.POLITICS_DATA?.knowledgeEncyclopedia || []);
     const essayTemplates = ref(window.POLITICS_DATA?.essayTemplates || []);
 
     // 提示信息 Toast
@@ -40,12 +43,12 @@ createApp({
     });
 
     // 本地持久化数据加载与保存
-    const storageKey = 'YAN_HUB_USER_DATA_V1';
+    const storageKey = 'YAN_HUB_USER_DATA_V2';
     const userData = ref({
       checkInDays: 7,
       lastCheckInDate: '',
       masteredVocabIds: [],
-      savedVocabIds: ['en-v-001'],
+      savedVocabIds: ['en-v-001', 'v55-101'],
       wrongQuestionIds: ['pol-q-002'],
       quizStats: { totalAttempted: 8, correctCount: 6 },
       flashcardMasteredIds: []
@@ -91,19 +94,20 @@ createApp({
     };
 
     // ==================== 考研英语模块逻辑 ====================
-    // 1. 词汇背诵
+    
+    // 1. 高频核心词汇背诵
     const vocabIndex = ref(0);
     const showVocabMeaning = ref(false);
-    const vocabFilter = ref('all'); // 'all' | 'saved' | '高频动词' | '高频名词' | '高频形容词' | '写作亮点词'
+    const vocabFilter = ref('all');
 
     const filteredVocabList = computed(() => {
       if (vocabFilter.value === 'saved') {
-        return vocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+        return coreVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
       }
       if (vocabFilter.value !== 'all') {
-        return vocabList.value.filter(v => v.category === vocabFilter.value);
+        return coreVocabList.value.filter(v => v.category === vocabFilter.value);
       }
-      return vocabList.value;
+      return coreVocabList.value;
     });
 
     const currentVocab = computed(() => {
@@ -141,14 +145,14 @@ createApp({
       }
     };
 
-    const markVocabMastered = () => {
-      if (!currentVocab.value) return;
-      const id = currentVocab.value.id;
-      if (!userData.value.masteredVocabIds.includes(id)) {
-        userData.value.masteredVocabIds.push(id);
+    const markVocabMastered = (id) => {
+      const targetId = id || (currentVocab.value && currentVocab.value.id);
+      if (!targetId) return;
+      if (!userData.value.masteredVocabIds.includes(targetId)) {
+        userData.value.masteredVocabIds.push(targetId);
       }
-      showToast(`已将 "${currentVocab.value.word}" 标记为牢记！`, 'success');
-      nextVocab();
+      showToast('标记为熟记！', 'success');
+      if (!id) nextVocab();
     };
 
     const toggleSaveVocab = (vocab) => {
@@ -164,7 +168,56 @@ createApp({
       }
     };
 
-    // 2. 长难句精读
+    // 2. 考研大纲 5530 全量词库 (Unit 单元检索与刷词系统)
+    const fullVocabSearch = ref('');
+    const fullVocabCurrentUnit = ref(1);
+    const wordsPerUnit = 50;
+
+    const searchedFullVocab = computed(() => {
+      if (!fullVocabSearch.value.trim()) {
+        return fullVocabList.value;
+      }
+      const q = fullVocabSearch.value.trim().toLowerCase();
+      return fullVocabList.value.filter(item => 
+        (item.word && item.word.toLowerCase().includes(q)) ||
+        (item.definition && item.definition.includes(q))
+      );
+    });
+
+    const totalUnits = computed(() => {
+      return Math.ceil(searchedFullVocab.value.length / wordsPerUnit) || 1;
+    });
+
+    const currentUnitWords = computed(() => {
+      const start = (fullVocabCurrentUnit.value - 1) * wordsPerUnit;
+      return searchedFullVocab.value.slice(start, start + wordsPerUnit);
+    });
+
+    const setFullVocabUnit = (u) => {
+      fullVocabCurrentUnit.value = Math.max(1, Math.min(u, totalUnits.value));
+    };
+
+    // 3. 历年真题阅读全文精读 (Reading Comprehension)
+    const selectedArticleIndex = ref(0);
+    const currentArticle = computed(() => articleList.value[selectedArticleIndex.value] || articleList.value[0]);
+    const userArticleAnswers = ref({});
+    const articleQuizSubmitted = ref({});
+
+    const selectArticle = (idx) => {
+      selectedArticleIndex.value = idx;
+    };
+
+    const submitArticleQuestion = (qId, optionLabel, correctLabel) => {
+      userArticleAnswers.value[qId] = optionLabel;
+      articleQuizSubmitted.value[qId] = true;
+      if (optionLabel === correctLabel) {
+        showToast('🎯 回答正确！精准定位原文细节！', 'success');
+      } else {
+        showToast('⚠️ 答案有误，请仔细研读考点解题思路！', 'warning');
+      }
+    };
+
+    // 4. 历年长难句精读
     const sentenceIndex = ref(0);
     const showSentenceBreakdown = ref(true);
     const showSentenceTranslation = ref(false);
@@ -178,7 +231,7 @@ createApp({
       userTranslation.value = '';
     };
 
-    // 3. 作文语料库
+    // 5. 作文语料库
     const writingSearchQuery = ref('');
     const filteredWritingReplacements = computed(() => {
       if (!writingSearchQuery.value.trim()) return writingArsenal.value.replacements || [];
@@ -194,9 +247,7 @@ createApp({
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
           showToast(tip, 'success');
-        }).catch(() => {
-          fallbackCopy(text, tip);
-        });
+        }).catch(() => fallbackCopy(text, tip));
       } else {
         fallbackCopy(text, tip);
       }
@@ -213,8 +264,9 @@ createApp({
     };
 
     // ==================== 考研政治模块逻辑 ====================
+    
     // 1. 刷题题库
-    const quizSubjectFilter = ref('all'); // 'all' | '马原' | '毛中特与新时代' | '史纲' | '思修法基'
+    const quizSubjectFilter = ref('all');
     const quizIndex = ref(0);
     const selectedSingleOption = ref('');
     const selectedMultiOptions = ref([]);
@@ -243,10 +295,8 @@ createApp({
       if (hasSubmittedQuiz.value) return;
       if (currentQuiz.value.type === 'single') {
         selectedSingleOption.value = label;
-        // 单选题点击即提交判断
         submitQuizAnswer();
       } else {
-        // 多选题切换勾选
         const idx = selectedMultiOptions.value.indexOf(label);
         if (idx > -1) {
           selectedMultiOptions.value.splice(idx, 1);
@@ -325,13 +375,33 @@ createApp({
       nextFlashcard();
     };
 
+    // 3. 考研政治核心考点全书 (Encyclopedia)
+    const encyclopediaSubjectIndex = ref(0);
+    const encyclopediaSearch = ref('');
+
+    const currentEncyclopedia = computed(() => {
+      return politicsEncyclopedia.value[encyclopediaSubjectIndex.value] || politicsEncyclopedia.value[0];
+    });
+
+    const filteredEncyclopediaSections = computed(() => {
+      if (!currentEncyclopedia.value) return [];
+      if (!encyclopediaSearch.value.trim()) return currentEncyclopedia.value.sections;
+      const q = encyclopediaSearch.value.trim().toLowerCase();
+      return currentEncyclopedia.value.sections.filter(sec => 
+        sec.title.toLowerCase().includes(q) ||
+        sec.points.some(p => p.toLowerCase().includes(q))
+      );
+    });
+
     // ==================== 错题与生词本管理 ====================
     const wrongQuestionObjects = computed(() => {
       return quizList.value.filter(q => userData.value.wrongQuestionIds.includes(q.id));
     });
 
     const savedVocabObjects = computed(() => {
-      return vocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+      const coreSaved = coreVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+      const fullSaved = fullVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+      return [...coreSaved, ...fullSaved];
     });
 
     const removeWrongQuestion = (id) => {
@@ -350,8 +420,8 @@ createApp({
     });
 
     const vocabMasteryPercentage = computed(() => {
-      if (vocabList.value.length === 0) return 0;
-      return Math.round((userData.value.masteredVocabIds.length / vocabList.value.length) * 100);
+      const total = fullVocabList.value.length || coreVocabList.value.length || 5530;
+      return Math.round((userData.value.masteredVocabIds.length / total) * 100);
     });
 
     // 清空与重置数据
@@ -388,9 +458,11 @@ createApp({
       triggerCheckIn,
       resetAllData,
 
-      // 英语
-      vocabList,
+      // 英语数据与逻辑
+      coreVocabList,
+      fullVocabList,
       sentenceList,
+      articleList,
       writingArsenal,
       vocabIndex,
       showVocabMeaning,
@@ -402,6 +474,24 @@ createApp({
       prevVocab,
       markVocabMastered,
       toggleSaveVocab,
+
+      // 5530 词库
+      fullVocabSearch,
+      fullVocabCurrentUnit,
+      searchedFullVocab,
+      totalUnits,
+      currentUnitWords,
+      setFullVocabUnit,
+
+      // 真题阅读文章
+      selectedArticleIndex,
+      currentArticle,
+      userArticleAnswers,
+      articleQuizSubmitted,
+      selectArticle,
+      submitArticleQuestion,
+
+      // 长难句与写作
       sentenceIndex,
       showSentenceBreakdown,
       showSentenceTranslation,
@@ -415,6 +505,7 @@ createApp({
       // 政治
       quizList,
       flashcardList,
+      politicsEncyclopedia,
       essayTemplates,
       quizSubjectFilter,
       quizIndex,
@@ -435,6 +526,12 @@ createApp({
       nextFlashcard,
       prevFlashcard,
       markFlashcardMastered,
+
+      // 政治考点全书
+      encyclopediaSubjectIndex,
+      encyclopediaSearch,
+      currentEncyclopedia,
+      filteredEncyclopediaSections,
 
       // 错题与生词本
       wrongQuestionObjects,

@@ -1,7 +1,6 @@
-/* 考研学习平台精细化样式 */
+/* 考研学习平台精细化样式 (含智能生词标注与意群断句系统) */
 
-/* 字体与基础平滑渲染 */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap');
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -9,15 +8,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 考研真题阅读排版专用衬线字体 */
+.reading-serif {
+  font-family: 'Merriweather', Georgia, serif;
+}
+
 /* 玻璃拟态卡片与边框发光 */
 .glass-panel {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-}
-
-.dark .glass-panel {
-  background: rgba(30, 41, 59, 0.85);
 }
 
 /* 翻转卡片 3D 动画效果 */
@@ -60,14 +60,42 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* 进度环与徽章脉冲 */
-@keyframes pulse-subtle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+/* 大纲考查词汇自动高亮与点击样式 */
+.kaoyan-word-highlight {
+  cursor: pointer;
+  border-bottom: 2px dotted #3b82f6;
+  background-color: rgba(219, 234, 254, 0.45);
+  padding: 0 2px;
+  border-radius: 3px;
+  transition: all 0.15s ease-in-out;
 }
 
-.animate-pulse-subtle {
-  animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.kaoyan-word-highlight:hover {
+  background-color: #fef08a; /* 暖黄高亮提示 */
+  color: #1e3a8a;
+  border-bottom: 2px solid #ca8a04;
+}
+
+/* 意群断句 (Chunking) 色块标签 */
+.chunk-segment {
+  display: inline-block;
+  margin: 2px 3px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background-color: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(203, 213, 225, 0.6);
+  transition: background-color 0.2s;
+}
+
+.chunk-segment:hover {
+  background-color: rgba(224, 231, 255, 0.6);
+  border-color: #818cf8;
+}
+
+.chunk-slash {
+  color: #94a3b8;
+  font-weight: bold;
+  margin: 0 3px;
 }
 
 /* 精美滚动条 */

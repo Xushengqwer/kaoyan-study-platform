@@ -1,11 +1,11 @@
-// 研途宝 · 考研英语与政治核心双核学习系统
+// 研途宝 · 考研英语与政治核心双核学习系统 (v3.0 全文精读与大纲词库深度互联版)
 const { createApp, ref, computed, onMounted, watch } = Vue;
 
 createApp({
   setup() {
     // 导航状态管理
     const currentTab = ref('dashboard'); // 'dashboard' | 'english' | 'politics' | 'notebook'
-    const englishTab = ref('vocab'); // 'vocab' | 'fullVocab' | 'articles' | 'sentences' | 'writing'
+    const englishTab = ref('articles'); // 'articles' | 'fullVocab' | 'vocab' | 'sentences' | 'writing'
     const politicsTab = ref('quiz'); // 'quiz' | 'flashcards' | 'encyclopedia' | 'essay'
     const notebookTab = ref('wrongQuestions'); // 'wrongQuestions' | 'vocabList'
 
@@ -13,8 +13,11 @@ createApp({
     const coreVocabList = ref(window.ENGLISH_DATA?.vocabulary || []);
     const fullVocabList = ref(window.KAOYAN_FULL_VOCAB || []);
     const sentenceList = ref(window.ENGLISH_DATA?.sentences || []);
-    const articleList = ref(window.ENGLISH_DATA?.articles || []);
     const writingArsenal = ref(window.ENGLISH_DATA?.writingArsenal || {});
+
+    // 阅读文章题库（结合精编真题 + 外刊同源题库）
+    const presetArticles = window.READING_CORPUS || window.ENGLISH_DATA?.articles || [];
+    const customArticles = ref([]);
 
     const quizList = ref(window.POLITICS_DATA?.questions || []);
     const flashcardList = ref(window.POLITICS_DATA?.flashcards || []);
@@ -34,7 +37,7 @@ createApp({
     const daysUntilExam = computed(() => {
       const now = new Date();
       const currentYear = now.getFullYear();
-      let examDate = new Date(currentYear, 11, 26); // 12月26日
+      let examDate = new Date(currentYear, 11, 26);
       if (now > examDate) {
         examDate = new Date(currentYear + 1, 11, 26);
       }
@@ -43,7 +46,7 @@ createApp({
     });
 
     // 本地持久化数据加载与保存
-    const storageKey = 'YAN_HUB_USER_DATA_V2';
+    const storageKey = 'YAN_HUB_USER_DATA_V3';
     const userData = ref({
       checkInDays: 7,
       lastCheckInDate: '',
@@ -54,12 +57,30 @@ createApp({
       flashcardMasteredIds: []
     });
 
+    // 快速大纲词汇哈希索引（用于即时文章生词匹配与划词查词）
+    let fullVocabMap = new Map();
+    const buildVocabIndex = () => {
+      fullVocabMap.clear();
+      fullVocabList.value.forEach(v => {
+        if (v.word) fullVocabMap.set(v.word.toLowerCase(), v);
+      });
+      coreVocabList.value.forEach(v => {
+        if (v.word && !fullVocabMap.has(v.word.toLowerCase())) {
+          fullVocabMap.set(v.word.toLowerCase(), v);
+        }
+      });
+    };
+
     const loadLocalData = () => {
       try {
         const saved = localStorage.getItem(storageKey);
         if (saved) {
           const parsed = JSON.parse(saved);
           userData.value = { ...userData.value, ...parsed };
+        }
+        const savedCustomArticles = localStorage.getItem('YAN_HUB_CUSTOM_ARTICLES');
+        if (savedCustomArticles) {
+          customArticles.value = JSON.parse(savedCustomArticles);
         }
       } catch (e) {
         console.warn('读取本地数据失败，采用默认值', e);
@@ -69,12 +90,14 @@ createApp({
     const saveLocalData = () => {
       try {
         localStorage.setItem(storageKey, JSON.stringify(userData.value));
+        localStorage.setItem('YAN_HUB_CUSTOM_ARTICLES', JSON.stringify(customArticles.value));
       } catch (e) {
         console.error('保存本地数据异常', e);
       }
     };
 
     watch(userData, () => saveLocalData(), { deep: true });
+    watch(customArticles, () => saveLocalData(), { deep: true });
 
     // 打卡功能
     const isCheckedInToday = computed(() => {
@@ -93,82 +116,155 @@ createApp({
       }
     };
 
-    // ==================== 考研英语模块逻辑 ====================
+    // ==================== 考研英语：海量阅读与意群断句模块 ====================
     
-    // 1. 高频核心词汇背诵
-    const vocabIndex = ref(0);
-    const showVocabMeaning = ref(false);
-    const vocabFilter = ref('all');
-
-    const filteredVocabList = computed(() => {
-      if (vocabFilter.value === 'saved') {
-        return coreVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
-      }
-      if (vocabFilter.value !== 'all') {
-        return coreVocabList.value.filter(v => v.category === vocabFilter.value);
-      }
-      return coreVocabList.value;
+    // 合并全部文章（内置权威真题 + 用户导入文章）
+    const allArticles = computed(() => {
+      return [...presetArticles, ...customArticles.value];
     });
 
-    const currentVocab = computed(() => {
-      if (filteredVocabList.value.length === 0) return null;
-      const idx = Math.min(vocabIndex.value, filteredVocabList.value.length - 1);
-      return filteredVocabList.value[idx];
+    const selectedArticleId = ref(presetArticles[0]?.id || '');
+    const currentArticle = computed(() => {
+      return allArticles.value.find(a => a.id === selectedArticleId.value) || allArticles.value[0];
     });
 
-    const playWordAudio = (word) => {
-      if (!window.speechSynthesis) {
-        showToast('当前浏览器不支持语音朗读', 'warning');
+    // 阅读模式：'bilingual' (双语精读) | 'chunks' (意群断句) | 'enOnly' (纯英沉浸)
+    const readingMode = ref('bilingual');
+    const highlightKaoyanWords = ref(true); // 是否高亮大纲考查词
+
+    // 划词查词弹窗对象
+    const activeLookup = ref(null);
+
+    // 智能单词查词处理
+    const lookupWord = (rawToken) => {
+      if (!rawToken) return;
+      const clean = rawToken.replace(/[^a-zA-Z]/g, '').toLowerCase();
+      if (!clean) return;
+
+      const found = fullVocabMap.get(clean) || 
+                    fullVocabMap.get(clean.replace(/s$|ed$|ing$|ly$/, '')) || 
+                    fullVocabMap.get(clean.replace(/es$/, ''));
+
+      if (found) {
+        activeLookup.value = {
+          word: found.word || clean,
+          phonetic: found.phonetic || '',
+          definition: found.definition || '大纲高频核心词汇',
+          freq: found.freq || found.examCount || 0,
+          category: found.category || '大纲词',
+          sentence: found.sentence || found.examSentence || '',
+          translation: found.translation || found.examTranslation || '',
+          id: found.id || `v-${clean}`
+        };
+      } else {
+        activeLookup.value = {
+          word: clean,
+          phonetic: '',
+          definition: '拓展阅读生词，建议借助真题语境掌握',
+          freq: 0,
+          category: '外刊拓展',
+          sentence: '',
+          translation: '',
+          id: `custom-${clean}`
+        };
+      }
+    };
+
+    // 分解自然段为单词流
+    const tokenizeParagraph = (text) => {
+      if (!text) return [];
+      const parts = text.split(/(\s+|[.,!?;:"'—\(\)\[\]]+)/);
+      return parts.map(part => {
+        const clean = part.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        const isTarget = highlightKaoyanWords.value && clean.length > 2 && fullVocabMap.has(clean);
+        return {
+          raw: part,
+          isWord: /[a-zA-Z]/.test(part),
+          isKaoyan: isTarget
+        };
+      });
+    };
+
+    // 自动意群断句生成器（若文章未提供 chunks，则由该引擎实时智能切分）
+    const generateChunks = (enText) => {
+      if (!enText) return '';
+      // 按照介词从句连词规则进行断句切分
+      let processed = enText
+        .replace(/([,;:—])/g, '$1 / ')
+        .replace(/\b(that|which|who|whom|whose|where|when|why|because|although|though|while|whereas|whether|if)\b/gi, ' / $1')
+        .replace(/\b(in order to|according to|in the wake of|with regard to|as well as)\b/gi, ' / $1')
+        .replace(/\s+\/\s+/g, ' / ');
+      return processed;
+    };
+
+    // 真题阅读文章配套答题
+    const userArticleAnswers = ref({});
+    const articleQuizSubmitted = ref({});
+
+    const submitArticleQuestion = (qId, optionLabel, correctLabel) => {
+      userArticleAnswers.value[qId] = optionLabel;
+      articleQuizSubmitted.value[qId] = true;
+      if (optionLabel === correctLabel) {
+        showToast('🎯 回答正确！准确定位原文事实论据！', 'success');
+      } else {
+        showToast('⚠️ 遗憾选错，请仔细阅读下方的考点解题思路！', 'warning');
+      }
+    };
+
+    // ==================== 文章导入工坊 (支持无限扩展几百篇真题与外刊) ====================
+    const showImportModal = ref(false);
+    const importForm = ref({
+      title: '',
+      topic: '社会经济与科技',
+      source: '真题精选 / 经济学人',
+      enText: '',
+      zhText: ''
+    });
+
+    const handleImportArticle = () => {
+      if (!importForm.value.title.trim() || !importForm.value.enText.trim()) {
+        showToast('请至少填写文章标题和英文正文！', 'warning');
         return;
       }
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(word);
-      utterance.lang = 'en-US';
-      utterance.rate = 0.9;
-      window.speechSynthesis.speak(utterance);
+
+      // 将文本按双换行分段
+      const enParas = importForm.value.enText.split(/\n\s*\n/).filter(p => p.trim());
+      const zhParas = importForm.value.zhText ? importForm.value.zhText.split(/\n\s*\n/).filter(p => p.trim()) : [];
+
+      const constructedParas = enParas.map((en, i) => {
+        return {
+          paraNum: i + 1,
+          en: en.trim(),
+          zh: zhParas[i] ? zhParas[i].trim() : '（暂无译文，可在精读模式下自测翻译）',
+          chunks: generateChunks(en.trim())
+        };
+      });
+
+      const newId = `imported-${Date.now()}`;
+      const newArt = {
+        id: newId,
+        year: '最新导入',
+        examType: '精选阅读',
+        section: '自定义',
+        title: importForm.value.title.trim(),
+        source: importForm.value.source.trim() || '自主精读文库',
+        topic: importForm.value.topic.trim() || '学术阅读',
+        difficulty: '4',
+        wordCount: importForm.value.enText.split(/\s+/).length,
+        paragraphs: constructedParas,
+        questions: []
+      };
+
+      customArticles.value.unshift(newArt);
+      selectedArticleId.value = newId;
+      showImportModal.value = false;
+      showToast(`🎉 成功导入并自动生成断句与大纲词汇标注！`, 'success');
+
+      // 重置表单
+      importForm.value = { title: '', topic: '社会经济与科技', source: '真题精选 / 经济学人', enText: '', zhText: '' };
     };
 
-    const nextVocab = () => {
-      showVocabMeaning.value = false;
-      if (vocabIndex.value < filteredVocabList.value.length - 1) {
-        vocabIndex.value += 1;
-      } else {
-        vocabIndex.value = 0;
-        showToast('已完成本轮词汇遍历！', 'info');
-      }
-    };
-
-    const prevVocab = () => {
-      showVocabMeaning.value = false;
-      if (vocabIndex.value > 0) {
-        vocabIndex.value -= 1;
-      }
-    };
-
-    const markVocabMastered = (id) => {
-      const targetId = id || (currentVocab.value && currentVocab.value.id);
-      if (!targetId) return;
-      if (!userData.value.masteredVocabIds.includes(targetId)) {
-        userData.value.masteredVocabIds.push(targetId);
-      }
-      showToast('标记为熟记！', 'success');
-      if (!id) nextVocab();
-    };
-
-    const toggleSaveVocab = (vocab) => {
-      const v = vocab || currentVocab.value;
-      if (!v) return;
-      const idx = userData.value.savedVocabIds.indexOf(v.id);
-      if (idx > -1) {
-        userData.value.savedVocabIds.splice(idx, 1);
-        showToast(`已从生词本移除 "${v.word}"`, 'info');
-      } else {
-        userData.value.savedVocabIds.push(v.id);
-        showToast(`已将 "${v.word}" 加入生词本！`, 'success');
-      }
-    };
-
-    // 2. 考研大纲 5530 全量词库 (Unit 单元检索与刷词系统)
+    // ==================== 考研英语：大纲 5530 词库逻辑 ====================
     const fullVocabSearch = ref('');
     const fullVocabCurrentUnit = ref(1);
     const wordsPerUnit = 50;
@@ -197,57 +293,96 @@ createApp({
       fullVocabCurrentUnit.value = Math.max(1, Math.min(u, totalUnits.value));
     };
 
-    // 3. 历年真题阅读全文精读 (Reading Comprehension)
-    const selectedArticleIndex = ref(0);
-    const currentArticle = computed(() => articleList.value[selectedArticleIndex.value] || articleList.value[0]);
-    const userArticleAnswers = ref({});
-    const articleQuizSubmitted = ref({});
-
-    const selectArticle = (idx) => {
-      selectedArticleIndex.value = idx;
+    const playWordAudio = (word) => {
+      if (!window.speechSynthesis) {
+        showToast('当前浏览器不支持语音朗读', 'warning');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
     };
 
-    const submitArticleQuestion = (qId, optionLabel, correctLabel) => {
-      userArticleAnswers.value[qId] = optionLabel;
-      articleQuizSubmitted.value[qId] = true;
-      if (optionLabel === correctLabel) {
-        showToast('🎯 回答正确！精准定位原文细节！', 'success');
+    const markVocabMastered = (id) => {
+      if (!id) return;
+      if (!userData.value.masteredVocabIds.includes(id)) {
+        userData.value.masteredVocabIds.push(id);
+      }
+      showToast('标记为熟记！', 'success');
+    };
+
+    const toggleSaveVocab = (vocab) => {
+      if (!vocab) return;
+      const id = vocab.id || `v-${vocab.word}`;
+      const idx = userData.value.savedVocabIds.indexOf(id);
+      if (idx > -1) {
+        userData.value.savedVocabIds.splice(idx, 1);
+        showToast(`已从生词本移除 "${vocab.word}"`, 'info');
       } else {
-        showToast('⚠️ 答案有误，请仔细研读考点解题思路！', 'warning');
+        userData.value.savedVocabIds.push(id);
+        showToast(`已将 "${vocab.word}" 加入生词本！`, 'success');
       }
     };
 
-    // 4. 历年长难句精读
+    // 核心词汇卡片背诵逻辑
+    const vocabIndex = ref(0);
+    const vocabFilter = ref('all');
+    const filteredVocabList = computed(() => {
+      if (vocabFilter.value === 'saved') {
+        return coreVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
+      }
+      if (vocabFilter.value !== 'all') {
+        return coreVocabList.value.filter(v => v.category === vocabFilter.value);
+      }
+      return coreVocabList.value;
+    });
+
+    const currentVocab = computed(() => {
+      if (filteredVocabList.value.length === 0) return null;
+      const idx = Math.min(vocabIndex.value, filteredVocabList.value.length - 1);
+      return filteredVocabList.value[idx];
+    });
+
+    const nextVocab = () => {
+      if (vocabIndex.value < filteredVocabList.value.length - 1) {
+        vocabIndex.value += 1;
+      } else {
+        vocabIndex.value = 0;
+        showToast('已完成本轮词汇遍历！', 'info');
+      }
+    };
+
+    const prevVocab = () => {
+      if (vocabIndex.value > 0) vocabIndex.value -= 1;
+    };
+
+    // 长难句与写作
     const sentenceIndex = ref(0);
     const showSentenceBreakdown = ref(true);
     const showSentenceTranslation = ref(false);
     const userTranslation = ref('');
-
     const currentSentence = computed(() => sentenceList.value[sentenceIndex.value] || sentenceList.value[0]);
-
     const selectSentence = (idx) => {
       sentenceIndex.value = idx;
       showSentenceTranslation.value = false;
       userTranslation.value = '';
     };
 
-    // 5. 作文语料库
     const writingSearchQuery = ref('');
     const filteredWritingReplacements = computed(() => {
       if (!writingSearchQuery.value.trim()) return writingArsenal.value.replacements || [];
       const q = writingSearchQuery.value.toLowerCase();
       return (writingArsenal.value.replacements || []).filter(item => 
         item.standard.toLowerCase().includes(q) || 
-        item.advanced.toLowerCase().includes(q) ||
-        item.example.toLowerCase().includes(q)
+        item.advanced.toLowerCase().includes(q)
       );
     });
 
     const copyText = (text, tip = '已成功复制到剪贴板！') => {
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          showToast(tip, 'success');
-        }).catch(() => fallbackCopy(text, tip));
+        navigator.clipboard.writeText(text).then(() => showToast(tip, 'success')).catch(() => fallbackCopy(text, tip));
       } else {
         fallbackCopy(text, tip);
       }
@@ -264,8 +399,6 @@ createApp({
     };
 
     // ==================== 考研政治模块逻辑 ====================
-    
-    // 1. 刷题题库
     const quizSubjectFilter = ref('all');
     const quizIndex = ref(0);
     const selectedSingleOption = ref('');
@@ -340,49 +473,32 @@ createApp({
       }
     };
 
-    // 2. 政治考点速记卡片 (Flashcards)
+    // 政治卡片
     const flashcardIndex = ref(0);
     const isFlashcardFlipped = ref(false);
     const currentFlashcard = computed(() => flashcardList.value[flashcardIndex.value] || flashcardList.value[0]);
-
-    const toggleFlashcardFlip = () => {
-      isFlashcardFlipped.value = !isFlashcardFlipped.value;
-    };
-
+    const toggleFlashcardFlip = () => isFlashcardFlipped.value = !isFlashcardFlipped.value;
     const nextFlashcard = () => {
       isFlashcardFlipped.value = false;
-      if (flashcardIndex.value < flashcardList.value.length - 1) {
-        flashcardIndex.value += 1;
-      } else {
-        flashcardIndex.value = 0;
-      }
+      flashcardIndex.value = (flashcardIndex.value < flashcardList.value.length - 1) ? flashcardIndex.value + 1 : 0;
     };
-
     const prevFlashcard = () => {
       isFlashcardFlipped.value = false;
-      if (flashcardIndex.value > 0) {
-        flashcardIndex.value -= 1;
-      }
+      if (flashcardIndex.value > 0) flashcardIndex.value -= 1;
     };
-
     const markFlashcardMastered = () => {
       if (!currentFlashcard.value) return;
-      const id = currentFlashcard.value.id;
-      if (!userData.value.flashcardMasteredIds.includes(id)) {
-        userData.value.flashcardMasteredIds.push(id);
+      if (!userData.value.flashcardMasteredIds.includes(currentFlashcard.value.id)) {
+        userData.value.flashcardMasteredIds.push(currentFlashcard.value.id);
       }
-      showToast('本考点已标记为熟练掌握！', 'success');
+      showToast('考点已牢记！', 'success');
       nextFlashcard();
     };
 
-    // 3. 考研政治核心考点全书 (Encyclopedia)
+    // 政治考点全书
     const encyclopediaSubjectIndex = ref(0);
     const encyclopediaSearch = ref('');
-
-    const currentEncyclopedia = computed(() => {
-      return politicsEncyclopedia.value[encyclopediaSubjectIndex.value] || politicsEncyclopedia.value[0];
-    });
-
+    const currentEncyclopedia = computed(() => politicsEncyclopedia.value[encyclopediaSubjectIndex.value] || politicsEncyclopedia.value[0]);
     const filteredEncyclopediaSections = computed(() => {
       if (!currentEncyclopedia.value) return [];
       if (!encyclopediaSearch.value.trim()) return currentEncyclopedia.value.sections;
@@ -393,15 +509,16 @@ createApp({
       );
     });
 
-    // ==================== 错题与生词本管理 ====================
-    const wrongQuestionObjects = computed(() => {
-      return quizList.value.filter(q => userData.value.wrongQuestionIds.includes(q.id));
-    });
-
+    // 错题与生词本
+    const wrongQuestionObjects = computed(() => quizList.value.filter(q => userData.value.wrongQuestionIds.includes(q.id)));
     const savedVocabObjects = computed(() => {
-      const coreSaved = coreVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
-      const fullSaved = fullVocabList.value.filter(v => userData.value.savedVocabIds.includes(v.id));
-      return [...coreSaved, ...fullSaved];
+      const list = [];
+      userData.value.savedVocabIds.forEach(id => {
+        let item = fullVocabList.value.find(v => v.id === id);
+        if (!item) item = coreVocabList.value.find(v => v.id === id);
+        if (item) list.push(item);
+      });
+      return list;
     });
 
     const removeWrongQuestion = (id) => {
@@ -412,19 +529,16 @@ createApp({
       }
     };
 
-    // 综合统计仪表盘指标
     const quizAccuracy = computed(() => {
       const total = userData.value.quizStats.totalAttempted;
-      if (total === 0) return 0;
-      return Math.round((userData.value.quizStats.correctCount / total) * 100);
+      return total === 0 ? 0 : Math.round((userData.value.quizStats.correctCount / total) * 100);
     });
 
     const vocabMasteryPercentage = computed(() => {
-      const total = fullVocabList.value.length || coreVocabList.value.length || 5530;
+      const total = fullVocabList.value.length || 5530;
       return Math.round((userData.value.masteredVocabIds.length / total) * 100);
     });
 
-    // 清空与重置数据
     const resetAllData = () => {
       if (confirm('确定要重置所有学习进度与错题本数据吗？')) {
         userData.value = {
@@ -442,6 +556,7 @@ createApp({
     };
 
     onMounted(() => {
+      buildVocabIndex();
       loadLocalData();
     });
 
@@ -458,51 +573,58 @@ createApp({
       triggerCheckIn,
       resetAllData,
 
-      // 英语数据与逻辑
-      coreVocabList,
-      fullVocabList,
-      sentenceList,
-      articleList,
-      writingArsenal,
-      vocabIndex,
-      showVocabMeaning,
-      vocabFilter,
-      filteredVocabList,
-      currentVocab,
-      playWordAudio,
-      nextVocab,
-      prevVocab,
-      markVocabMastered,
-      toggleSaveVocab,
+      // 海量阅读与意群断句
+      allArticles,
+      selectedArticleId,
+      currentArticle,
+      readingMode,
+      highlightKaoyanWords,
+      activeLookup,
+      lookupWord,
+      tokenizeParagraph,
+      generateChunks,
+      userArticleAnswers,
+      articleQuizSubmitted,
+      submitArticleQuestion,
+
+      // 文章导入工坊
+      showImportModal,
+      importForm,
+      handleImportArticle,
 
       // 5530 词库
+      fullVocabList,
       fullVocabSearch,
       fullVocabCurrentUnit,
       searchedFullVocab,
       totalUnits,
       currentUnitWords,
       setFullVocabUnit,
+      playWordAudio,
+      markVocabMastered,
+      toggleSaveVocab,
 
-      // 真题阅读文章
-      selectedArticleIndex,
-      currentArticle,
-      userArticleAnswers,
-      articleQuizSubmitted,
-      selectArticle,
-      submitArticleQuestion,
-
-      // 长难句与写作
+      // 核心词汇、长难句与写作
+      coreVocabList,
+      vocabIndex,
+      vocabFilter,
+      filteredVocabList,
+      currentVocab,
+      nextVocab,
+      prevVocab,
+      sentenceList,
       sentenceIndex,
       showSentenceBreakdown,
       showSentenceTranslation,
       userTranslation,
       currentSentence,
       selectSentence,
+      writingArsenal,
       writingSearchQuery,
       filteredWritingReplacements,
       copyText,
 
-      // 政治
+      // 政治全科
       quizList,
       flashcardList,
       politicsEncyclopedia,
@@ -526,14 +648,12 @@ createApp({
       nextFlashcard,
       prevFlashcard,
       markFlashcardMastered,
-
-      // 政治考点全书
       encyclopediaSubjectIndex,
       encyclopediaSearch,
       currentEncyclopedia,
       filteredEncyclopediaSections,
 
-      // 错题与生词本
+      // 错题与生词
       wrongQuestionObjects,
       savedVocabObjects,
       removeWrongQuestion,

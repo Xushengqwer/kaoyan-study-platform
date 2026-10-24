@@ -334,17 +334,51 @@
           <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
               
-              <!-- 文章选择与篇数统计 -->
-              <div class="flex items-center space-x-3">
-                <span class="text-xs font-bold text-slate-700 whitespace-nowrap">选择文章：</span>
+              <!-- 文章选择、题材筛选与关键词快搜 -->
+              <div class="flex flex-wrap items-center gap-2.5">
+                <!-- 题材分类筛选 -->
                 <select 
-                  v-model="selectedArticleId" 
-                  class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl px-3 py-2 font-semibold max-w-xs sm:max-w-md truncate focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option v-for="art in allArticles" :key="art.id" :value="art.id">
-                    [{{ art.year }} {{ art.examType }}] {{ art.title }} ({{ art.topic }})
+                  v-model="articleTopicFilter" 
+                  class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl px-2.5 py-2 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="all">📂 全部题材 ({{ allArticles.length }}篇)</option>
+                  <option v-for="top in availableTopics" :key="top" :value="top">
+                    {{ top }}
                   </option>
                 </select>
-                <span class="text-xs text-slate-400 whitespace-nowrap">文库共 {{ allArticles.length }} 篇</span>
+
+                <!-- 文章选择下拉菜单 -->
+                <div class="flex items-center space-x-1">
+                  <select 
+                    v-model="selectedArticleId" 
+                    class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl px-3 py-2 font-semibold max-w-[200px] sm:max-w-xs md:max-w-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option v-for="art in filteredArticles" :key="art.id" :value="art.id">
+                      [{{ art.year }} {{ art.examType }}] {{ art.title }}
+                    </option>
+                  </select>
+
+                  <!-- 上一篇 / 下一篇快捷微调按钮 -->
+                  <button 
+                    @click="prevArticle" 
+                    class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition"
+                    title="上一篇">
+                    ◀
+                  </button>
+                  <button 
+                    @click="nextArticle" 
+                    class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition"
+                    title="下一篇">
+                    ▶
+                  </button>
+                </div>
+
+                <!-- 关键词搜索过滤 -->
+                <div class="relative w-32 sm:w-40">
+                  <input 
+                    v-model="articleSearchQuery" 
+                    type="text" 
+                    placeholder="搜索篇章/题材..." 
+                    class="w-full text-xs px-2.5 py-1.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-slate-50">
+                </div>
               </div>
 
               <!-- 阅读模式切换器与导入按钮 -->
@@ -509,6 +543,27 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <!-- 文章底部上一篇/下一篇翻页导航 -->
+            <div class="border-t border-slate-100 pt-5 flex items-center justify-between gap-4">
+              <button 
+                @click="prevArticle" 
+                class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center space-x-1.5 shadow-2xs">
+                <span>⬅️</span>
+                <span>上一篇精读</span>
+              </button>
+
+              <span class="text-xs text-slate-400 font-medium hidden sm:inline truncate max-w-sm">
+                当前：[{{ currentArticle.year }} {{ currentArticle.examType }}] {{ currentArticle.title }}
+              </span>
+
+              <button 
+                @click="nextArticle" 
+                class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex items-center space-x-1.5 shadow-sm">
+                <span>下一篇精读</span>
+                <span>➡️</span>
+              </button>
             </div>
 
           </div>

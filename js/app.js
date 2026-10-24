@@ -128,6 +128,65 @@ createApp({
       return allArticles.value.find(a => a.id === selectedArticleId.value) || allArticles.value[0];
     });
 
+    // 文章题材分类筛选与关键词搜索
+    const articleTopicFilter = ref('all');
+    const articleSearchQuery = ref('');
+
+    const availableTopics = computed(() => {
+      const set = new Set();
+      allArticles.value.forEach(a => {
+        if (a.topic) set.add(a.topic);
+      });
+      return Array.from(set);
+    });
+
+    const filteredArticles = computed(() => {
+      let list = allArticles.value;
+      if (articleTopicFilter.value && articleTopicFilter.value !== 'all') {
+        list = list.filter(a => a.topic === articleTopicFilter.value);
+      }
+      if (articleSearchQuery.value && articleSearchQuery.value.trim()) {
+        const q = articleSearchQuery.value.trim().toLowerCase();
+        list = list.filter(a => 
+          (a.title && a.title.toLowerCase().includes(q)) ||
+          (a.topic && a.topic.toLowerCase().includes(q)) ||
+          (a.source && a.source.toLowerCase().includes(q)) ||
+          (a.year && a.year.toString().includes(q))
+        );
+      }
+      return list;
+    });
+
+    // 监听过滤列表，如果当前选中文章不在过滤结果中，自动切换到第一篇
+    watch(filteredArticles, (newList) => {
+      if (newList.length && !newList.some(a => a.id === selectedArticleId.value)) {
+        selectedArticleId.value = newList[0].id;
+      }
+    });
+
+    // 上一篇 / 下一篇便捷切换
+    const prevArticle = () => {
+      const list = filteredArticles.value.length ? filteredArticles.value : allArticles.value;
+      if (!list.length) return;
+      const idx = list.findIndex(a => a.id === selectedArticleId.value);
+      if (idx > 0) {
+        selectedArticleId.value = list[idx - 1].id;
+      } else if (idx === 0) {
+        selectedArticleId.value = list[list.length - 1].id;
+      }
+    };
+
+    const nextArticle = () => {
+      const list = filteredArticles.value.length ? filteredArticles.value : allArticles.value;
+      if (!list.length) return;
+      const idx = list.findIndex(a => a.id === selectedArticleId.value);
+      if (idx >= 0 && idx < list.length - 1) {
+        selectedArticleId.value = list[idx + 1].id;
+      } else if (idx === list.length - 1) {
+        selectedArticleId.value = list[0].id;
+      }
+    };
+
     // 阅读模式：'bilingual' (双语精读) | 'chunks' (意群断句) | 'enOnly' (纯英沉浸)
     const readingMode = ref('bilingual');
     const highlightKaoyanWords = ref(true); // 是否高亮大纲考查词
@@ -577,6 +636,12 @@ createApp({
       allArticles,
       selectedArticleId,
       currentArticle,
+      articleTopicFilter,
+      articleSearchQuery,
+      availableTopics,
+      filteredArticles,
+      prevArticle,
+      nextArticle,
       readingMode,
       highlightKaoyanWords,
       activeLookup,
